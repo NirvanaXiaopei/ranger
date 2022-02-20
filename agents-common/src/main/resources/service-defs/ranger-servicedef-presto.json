@@ -174,7 +174,7 @@
       "validationRegEx": "",
       "validationMessage": "",
       "uiHint": "",
-      "defaultValue": "io.prestosql.jdbc.PrestoDriver"
+      "defaultValue": "com.facebook.presto.jdbc.PrestoDriver"
     },
     {
       "itemId": 4,

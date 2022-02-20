@@ -18,14 +18,10 @@
  */
 package org.apache.ranger.authorization.presto.authorizer;
 
-import io.prestosql.spi.connector.CatalogSchemaName;
-import io.prestosql.spi.connector.CatalogSchemaTableName;
-import io.prestosql.spi.connector.SchemaTableName;
-import io.prestosql.spi.security.AccessDeniedException;
-import io.prestosql.spi.security.Identity;
-import io.prestosql.spi.security.PrestoPrincipal;
-import io.prestosql.spi.security.Privilege;
-import io.prestosql.spi.security.SystemAccessControl;
+import com.facebook.presto.common.CatalogSchemaName;
+import com.facebook.presto.spi.CatalogSchemaTableName;
+import com.facebook.presto.spi.SchemaTableName;
+import com.facebook.presto.spi.security.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.security.UserGroupInformation;
@@ -113,7 +109,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanSetUser(Optional<Principal> principal, String userName) {
+  public void checkCanSetUser(Identity identity, AccessControlContext context, Optional<Principal> principal, String userName) {
     if(LOG.isDebugEnabled()) {
       LOG.debug("==> RangerSystemAccessControl.checkCanSetUser(" + userName + ")");
     }
@@ -127,7 +123,12 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanSetSystemSessionProperty(Identity identity, String propertyName) {
+  public void checkQueryIntegrity(Identity identity, AccessControlContext context, String query) {
+
+  }
+
+  @Override
+  public void checkCanSetSystemSessionProperty(Identity identity, AccessControlContext context, String propertyName) {
     if (!checkPermission(new RangerPrestoResource(), identity, PrestoAccessType.ADMIN)) {
       LOG.info("==> RangerSystemAccessControl.checkCanSetSystemSessionProperty denied");
       AccessDeniedException.denySetSystemSessionProperty(propertyName);
@@ -135,7 +136,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanAccessCatalog(Identity identity, String catalogName) {
+  public void checkCanAccessCatalog(Identity identity, AccessControlContext context, String catalogName) {
     if (!checkPermission(createResource(catalogName), identity, PrestoAccessType.SELECT)) {
       LOG.info("==> RangerSystemAccessControl.checkCanAccessCatalog(" + catalogName + ") denied");
       AccessDeniedException.denyCatalogAccess(catalogName);
@@ -143,12 +144,12 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public Set<String> filterCatalogs(Identity identity, Set<String> catalogs) {
+  public Set<String> filterCatalogs(Identity identity, AccessControlContext context, Set<String> catalogs) {
     return catalogs;
   }
 
   @Override
-  public void checkCanCreateSchema(Identity identity, CatalogSchemaName schema) {
+  public void checkCanCreateSchema(Identity identity, AccessControlContext context, CatalogSchemaName schema) {
     if (!checkPermission(createResource(schema.getCatalogName(), schema.getSchemaName()), identity, PrestoAccessType.CREATE)) {
       LOG.info("==> RangerSystemAccessControl.checkCanCreateSchema(" + schema.getSchemaName() + ") denied");
       AccessDeniedException.denyCreateSchema(schema.getSchemaName());
@@ -156,7 +157,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanDropSchema(Identity identity, CatalogSchemaName schema) {
+  public void checkCanDropSchema(Identity identity, AccessControlContext context, CatalogSchemaName schema) {
     if (!checkPermission(createResource(schema.getCatalogName(), schema.getSchemaName()), identity, PrestoAccessType.DROP)) {
       LOG.info("==> RangerSystemAccessControl.checkCanDropSchema(" + schema.getSchemaName() + ") denied");
       AccessDeniedException.denyDropSchema(schema.getSchemaName());
@@ -164,7 +165,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanRenameSchema(Identity identity, CatalogSchemaName schema, String newSchemaName) {
+  public void checkCanRenameSchema(Identity identity,  AccessControlContext context, CatalogSchemaName schema, String newSchemaName) {
     RangerPrestoResource res = createResource(schema.getCatalogName(), schema.getSchemaName());
     if (!checkPermission(res, identity, PrestoAccessType.ALTER)) {
       LOG.info("==> RangerSystemAccessControl.checkCanRenameSchema(" + schema.getSchemaName() + ") denied");
@@ -173,7 +174,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanShowSchemas(Identity identity, String catalogName) {
+  public void checkCanShowSchemas(Identity identity, AccessControlContext context, String catalogName) {
     if (!checkPermission(createResource(catalogName), identity, PrestoAccessType.SELECT)) {
       LOG.info("==> RangerSystemAccessControl.checkCanShowSchemas(" + catalogName + ") denied");
       AccessDeniedException.denyShowSchemas(catalogName);
@@ -181,13 +182,13 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public Set<String> filterSchemas(Identity identity, String catalogName, Set<String> schemaNames) {
+  public Set<String> filterSchemas(Identity identity,  AccessControlContext context, String catalogName, Set<String> schemaNames) {
     LOG.debug("==> RangerSystemAccessControl.filterSchemas(" + catalogName + ")");
     return schemaNames;
   }
 
   @Override
-  public void checkCanCreateTable(Identity identity, CatalogSchemaTableName table) {
+  public void checkCanCreateTable(Identity identity,  AccessControlContext context, CatalogSchemaTableName table) {
     if (!checkPermission(createResource(table), identity, PrestoAccessType.CREATE)) {
       LOG.info("==> RangerSystemAccessControl.checkCanCreateTable(" + table.getSchemaTableName().getTableName() + ") denied");
       AccessDeniedException.denyCreateTable(table.getSchemaTableName().getTableName());
@@ -195,7 +196,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanDropTable(Identity identity, CatalogSchemaTableName table) {
+  public void checkCanDropTable(Identity identity,  AccessControlContext context, CatalogSchemaTableName table) {
     if (!checkPermission(createResource(table), identity, PrestoAccessType.DROP)) {
       LOG.info("==> RangerSystemAccessControl.checkCanDropTable(" + table.getSchemaTableName().getTableName() + ") denied");
       AccessDeniedException.denyDropTable(table.getSchemaTableName().getTableName());
@@ -203,7 +204,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanRenameTable(Identity identity, CatalogSchemaTableName table, CatalogSchemaTableName newTable) {
+  public void checkCanRenameTable(Identity identity,  AccessControlContext context, CatalogSchemaTableName table, CatalogSchemaTableName newTable) {
     RangerPrestoResource res = createResource(table);
     if (!checkPermission(res, identity, PrestoAccessType.ALTER)) {
       LOG.info("==> RangerSystemAccessControl.checkCanRenameTable(" + table.getSchemaTableName().getTableName() + ") denied");
@@ -212,7 +213,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanShowTablesMetadata(Identity identity, CatalogSchemaName schema) {
+  public void checkCanShowTablesMetadata(Identity identity,  AccessControlContext context, CatalogSchemaName schema) {
     if (!checkPermission(createResource(schema.getCatalogName(), schema.getSchemaName()), identity, PrestoAccessType.SELECT)) {
       LOG.info("==> RangerSystemAccessControl.checkCanShowTablesMetadata(" + schema.getSchemaName() + ") denied");
       AccessDeniedException.denyShowTablesMetadata(schema.getSchemaName());
@@ -220,13 +221,13 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public Set<SchemaTableName> filterTables(Identity identity, String catalogName, Set<SchemaTableName> tableNames) {
+  public Set<SchemaTableName> filterTables(Identity identity,  AccessControlContext context, String catalogName, Set<SchemaTableName> tableNames) {
     LOG.debug("==> RangerSystemAccessControl.filterTables(" + catalogName + ")");
     return tableNames;
   }
 
   @Override
-  public void checkCanAddColumn(Identity identity, CatalogSchemaTableName table) {
+  public void checkCanAddColumn(Identity identity,  AccessControlContext context, CatalogSchemaTableName table) {
     RangerPrestoResource res = createResource(table);
     if (!checkPermission(res, identity, PrestoAccessType.ALTER)) {
       AccessDeniedException.denyAddColumn(table.getSchemaTableName().getTableName());
@@ -234,7 +235,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanDropColumn(Identity identity, CatalogSchemaTableName table) {
+  public void checkCanDropColumn(Identity identity, AccessControlContext context, CatalogSchemaTableName table) {
     RangerPrestoResource res = createResource(table);
     if (!checkPermission(res, identity, PrestoAccessType.ALTER)) {
       LOG.info("==> RangerSystemAccessControl.checkCanDropColumn(" + table.getSchemaTableName().getTableName() + ") denied");
@@ -243,7 +244,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanRenameColumn(Identity identity, CatalogSchemaTableName table) {
+  public void checkCanRenameColumn(Identity identity, AccessControlContext context, CatalogSchemaTableName table) {
     RangerPrestoResource res = createResource(table);
     if (!checkPermission(res, identity, PrestoAccessType.ALTER)) {
       LOG.info("==> RangerSystemAccessControl.checkCanRenameColumn(" + table.getSchemaTableName().getTableName() + ") denied");
@@ -252,7 +253,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanSelectFromColumns(Identity identity, CatalogSchemaTableName table, Set<String> columns) {
+  public void checkCanSelectFromColumns(Identity identity, AccessControlContext context, CatalogSchemaTableName table, Set<String> columns) {
     for (RangerPrestoResource res : createResource(table, columns)) {
       if (!checkPermission(res, identity, PrestoAccessType.SELECT)) {
         LOG.info("==> RangerSystemAccessControl.checkCanSelectFromColumns(" + table.getSchemaTableName().getTableName() + ") denied");
@@ -262,7 +263,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanInsertIntoTable(Identity identity, CatalogSchemaTableName table) {
+  public void checkCanInsertIntoTable(Identity identity,  AccessControlContext context,CatalogSchemaTableName table) {
     RangerPrestoResource res = createResource(table);
     if (!checkPermission(res, identity, PrestoAccessType.INSERT)) {
       LOG.info("==> RangerSystemAccessControl.checkCanInsertIntoTable(" + table.getSchemaTableName().getTableName() + ") denied");
@@ -271,7 +272,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanDeleteFromTable(Identity identity, CatalogSchemaTableName table) {
+  public void checkCanDeleteFromTable(Identity identity,  AccessControlContext context,CatalogSchemaTableName table) {
     if (!checkPermission(createResource(table), identity, PrestoAccessType.DELETE)) {
       LOG.info("==> RangerSystemAccessControl.checkCanDeleteFromTable(" + table.getSchemaTableName().getTableName() + ") denied");
       AccessDeniedException.denyDeleteTable(table.getSchemaTableName().getTableName());
@@ -279,7 +280,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanCreateView(Identity identity, CatalogSchemaTableName view) {
+  public void checkCanCreateView(Identity identity,  AccessControlContext context,CatalogSchemaTableName view) {
     if (!checkPermission(createResource(view), identity, PrestoAccessType.CREATE)) {
       LOG.info("==> RangerSystemAccessControl.checkCanCreateView(" + view.getSchemaTableName().getTableName() + ") denied");
       AccessDeniedException.denyCreateView(view.getSchemaTableName().getTableName());
@@ -287,7 +288,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanDropView(Identity identity, CatalogSchemaTableName view) {
+  public void checkCanDropView(Identity identity, AccessControlContext context, CatalogSchemaTableName view) {
     if (!checkPermission(createResource(view), identity, PrestoAccessType.DROP)) {
       LOG.info("==> RangerSystemAccessControl.checkCanDropView(" + view.getSchemaTableName().getTableName() + ") denied");
       AccessDeniedException.denyCreateView(view.getSchemaTableName().getTableName());
@@ -295,7 +296,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanCreateViewWithSelectFromColumns(Identity identity, CatalogSchemaTableName table, Set<String> columns) {
+  public void checkCanCreateViewWithSelectFromColumns(Identity identity,  AccessControlContext context, CatalogSchemaTableName table, Set<String> columns) {
     for (RangerPrestoResource res : createResource(table, columns)) {
       if (!checkPermission(res, identity, PrestoAccessType.CREATE)) {
         LOG.info("==> RangerSystemAccessControl.checkCanDropView(" + table.getSchemaTableName().getTableName() + ") denied");
@@ -305,7 +306,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanSetCatalogSessionProperty(Identity identity, String catalogName, String propertyName) {
+  public void checkCanSetCatalogSessionProperty(Identity identity, AccessControlContext context, String catalogName, String propertyName) {
     if (!checkPermission(createResource(catalogName), identity, PrestoAccessType.ADMIN)) {
       LOG.info("==> RangerSystemAccessControl.checkCanSetSystemSessionProperty(" + catalogName + ") denied");
       AccessDeniedException.denySetCatalogSessionProperty(catalogName, propertyName);
@@ -313,7 +314,7 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanGrantTablePrivilege(Identity identity, Privilege privilege, CatalogSchemaTableName table, PrestoPrincipal grantee, boolean withGrantOption) {
+  public void checkCanGrantTablePrivilege(Identity identity,  AccessControlContext context, Privilege privilege, CatalogSchemaTableName table, PrestoPrincipal grantee, boolean withGrantOption) {
     if (!checkPermission(createResource(table), identity, PrestoAccessType.ADMIN)) {
       LOG.info("==> RangerSystemAccessControl.checkCanGrantTablePrivilege(" + table + ") denied");
       AccessDeniedException.denyGrantTablePrivilege(privilege.toString(), table.toString());
@@ -321,20 +322,20 @@ public class RangerSystemAccessControl
   }
 
   @Override
-  public void checkCanRevokeTablePrivilege(Identity identity, Privilege privilege, CatalogSchemaTableName table, PrestoPrincipal revokee, boolean grantOptionFor) {
+  public void checkCanRevokeTablePrivilege(Identity identity,  AccessControlContext context, Privilege privilege, CatalogSchemaTableName table, PrestoPrincipal revokee, boolean grantOptionFor) {
     if (!checkPermission(createResource(table), identity, PrestoAccessType.ADMIN)) {
       LOG.info("==> RangerSystemAccessControl.checkCanRevokeTablePrivilege(" + table + ") denied");
       AccessDeniedException.denyRevokeTablePrivilege(privilege.toString(), table.toString());
     }
   }
 
-  @Override
-  public void checkCanShowRoles(Identity identity, String catalogName) {
-    if (!checkPermission(createResource(catalogName), identity, PrestoAccessType.ADMIN)) {
-      LOG.info("==> RangerSystemAccessControl.checkCanShowRoles(" + catalogName + ") denied");
-      AccessDeniedException.denyShowRoles(catalogName);
-    }
-  }
+//  @Override
+//  public void checkCanShowRoles(Identity identity, String catalogName) {
+//    if (!checkPermission(createResource(catalogName), identity, PrestoAccessType.ADMIN)) {
+//      LOG.info("==> RangerSystemAccessControl.checkCanShowRoles(" + catalogName + ") denied");
+//      AccessDeniedException.denyShowRoles(catalogName);
+//    }
+//  }
 
   private static RangerPrestoResource createResource(CatalogSchemaName catalogSchemaName) {
     return createResource(catalogSchemaName.getCatalogName(), catalogSchemaName.getSchemaName());

@@ -32,7 +32,7 @@
         <outputDirectory>/ews/webapp</outputDirectory>
      </binaries>
      <includes>
-		<include>org.apache.ranger:security-admin-web</include>
+    <include>org.apache.ranger:security-admin-web</include>
      </includes>
     </moduleSet>
 
@@ -43,7 +43,7 @@
         <outputDirectory>/ews/ranger_jaas</outputDirectory>
      </binaries>
      <includes>
-		<include>org.apache.ranger:unixauthclient</include>
+    <include>org.apache.ranger:unixauthclient</include>
      </includes>
     </moduleSet>
 
@@ -189,7 +189,7 @@
               <dependencySets>
                   <dependencySet>
                       <includes>
-			  <include>org.apache.hadoop:hadoop-ozone-common:jar:${ozone.version}</include>
+        <include>org.apache.hadoop:hadoop-ozone-common:jar:${ozone.version}</include>
                           <include>org.apache.hadoop:hadoop-ozone-client:jar:${ozone.version}</include>
                           <include>org.apache.hadoop:hadoop-hdds-common:jar:${ozone.version}</include>
                           <include>org.apache.hadoop:hadoop-hdds-client:jar:${ozone.version}</include>
@@ -241,17 +241,17 @@
                     <include>org.apache.tomcat:tomcat-annotations-api*</include>
                     <include>org.eclipse.jdt.core.compiler:ecj:jar:P20140317-1600</include>
                     <include>log4j:log4j</include>
-		    		<include>org.apache.hadoop:hadoop-auth:jar:${hadoop.version}</include>
-		    		<include>org.apache.ranger:ranger-plugins-common</include>                    
-		   			<include>org.slf4j:slf4j-api</include>
+            <include>org.apache.hadoop:hadoop-auth:jar:${hadoop.version}</include>
+            <include>org.apache.ranger:ranger-plugins-common</include>                    
+            <include>org.slf4j:slf4j-api</include>
                     <include>org.apache.hadoop:hadoop-common</include>
                     <include>commons-logging:commons-logging</include>
                     <include>com.sun.jersey.contribs:jersey-multipart</include>
                     <include>com.google.guava:guava</include>
                     <include>commons-collections:commons-collections</include>
                     <include>commons-lang:commons-lang</include>
-		    		<include>commons-io:commons-io</include>
-		    		 <include>org.apache.solr:solr-solrj</include>
+            <include>commons-io:commons-io</include>
+             <include>org.apache.solr:solr-solrj</include>
                     <include>org.apache.httpcomponents:httpclient</include>
                     <include>org.apache.httpcomponents:httpcore</include>
                     <include>org.noggit:noggit</include>
@@ -271,7 +271,7 @@
         </dependencySets>
      </binaries>
      <includes>
-	    <include>org.apache.ranger:embeddedwebserver</include>
+      <include>org.apache.ranger:embeddedwebserver</include>
      </includes>
     </moduleSet>
 
@@ -286,7 +286,7 @@
             <dependencySet>
                 <outputDirectory>/cred/lib</outputDirectory>
                 <unpack>false</unpack>
-   				<includes>
+          <includes>
                     <include>commons-cli:commons-cli</include>
                     <include>commons-collections:commons-collections</include>
                     <include>commons-configuration:commons-configuration</include>
@@ -298,16 +298,16 @@
                     <include>org.slf4j:slf4j-api</include>
                     <include>org.apache.hadoop:hadoop-common</include>
                     <include>org.apache.hadoop:hadoop-auth</include>
-              		<include>org.apache.htrace:htrace-core4:jar:${htrace-core.version}</include>
-					<include>com.fasterxml.woodstox:woodstox-core:jar:${fasterxml.woodstox.version}</include>
-					<include>org.codehaus.woodstox:stax2-api:jar:${codehaus.woodstox.stax2api.version}</include>
-					<include>org.apache.commons:commons-configuration2:jar:${commons.configuration.version}</include>
-				</includes>
+                  <include>org.apache.htrace:htrace-core4:jar:${htrace-core.version}</include>
+          <include>com.fasterxml.woodstox:woodstox-core:jar:${fasterxml.woodstox.version}</include>
+          <include>org.codehaus.woodstox:stax2-api:jar:${codehaus.woodstox.stax2api.version}</include>
+          <include>org.apache.commons:commons-configuration2:jar:${commons.configuration.version}</include>
+        </includes>
             </dependencySet>
         </dependencySets>
      </binaries>
      <includes>
-	    <include>org.apache.ranger:credentialbuilder</include>
+      <include>org.apache.ranger:credentialbuilder</include>
      </includes>
     </moduleSet>
 <moduleSet>
@@ -321,42 +321,42 @@
             <dependencySet>
                 <outputDirectory>/jisql/lib</outputDirectory>
                 <unpack>false</unpack>
-				<includes>
+        <includes>
                     <include>net.sf.jopt-simple:jopt-simple</include>
-				</includes>
+        </includes>
             </dependencySet>
         </dependencySets>
      </binaries>
      <includes>
-	    <include>org.apache.ranger:jisql</include>
+      <include>org.apache.ranger:jisql</include>
      </includes>
     </moduleSet>
     
-    	     <moduleSet>
-     			<binaries>
-        			<includeDependencies>true</includeDependencies>
-        			<outputDirectory>/ews/webapp/WEB-INF/classes/ranger-plugins/kafka</outputDirectory>
-        			<unpack>false</unpack>
-        			<directoryMode>755</directoryMode>
-        			<fileMode>644</fileMode>
-     			</binaries>
-     			<includes>
-       				<include>org.apache.ranger:ranger-kafka-plugin</include>
-     			</includes>
-    		</moduleSet>
-    		
-    		<moduleSet>
-     			<binaries>
-        			<includeDependencies>true</includeDependencies>
-        			<outputDirectory>/ews/webapp/WEB-INF/classes/ranger-plugins/solr</outputDirectory>
-        			<unpack>false</unpack>
-        			<directoryMode>755</directoryMode>
-        			<fileMode>644</fileMode>
-     			</binaries>
-     			<includes>
-       				<include>org.apache.ranger:ranger-solr-plugin</include>
-     			</includes>
-    		</moduleSet>
+           <moduleSet>
+          <binaries>
+              <includeDependencies>true</includeDependencies>
+              <outputDirectory>/ews/webapp/WEB-INF/classes/ranger-plugins/kafka</outputDirectory>
+              <unpack>false</unpack>
+              <directoryMode>755</directoryMode>
+              <fileMode>644</fileMode>
+          </binaries>
+          <includes>
+              <include>org.apache.ranger:ranger-kafka-plugin</include>
+          </includes>
+        </moduleSet>
+        
+        <moduleSet>
+          <binaries>
+              <includeDependencies>true</includeDependencies>
+              <outputDirectory>/ews/webapp/WEB-INF/classes/ranger-plugins/solr</outputDirectory>
+              <unpack>false</unpack>
+              <directoryMode>755</directoryMode>
+              <fileMode>644</fileMode>
+          </binaries>
+          <includes>
+              <include>org.apache.ranger:ranger-solr-plugin</include>
+          </includes>
+        </moduleSet>
 
       <moduleSet>
           <binaries>
@@ -452,8 +452,8 @@
               <dependencySets>
                   <dependencySet>
                       <includes>
-                          <include>io.prestosql:presto-spi:jar:${presto.version}</include>
-                          <include>io.prestosql:presto-jdbc:jar:${presto.version}</include>
+                          <include>com.facebook.presto:presto-spi:jar:${presto.version}</include>
+                          <include>com.facebook.presto:presto-jdbc:jar:${presto.version}</include>
                       </includes>
                   </dependencySet>
               </dependencySets>
@@ -466,82 +466,82 @@
   </moduleSets>
 
   <fileSets>
-	<fileSet>
-		<outputDirectory>/ews</outputDirectory>
-		<directory>embeddedwebserver/scripts</directory>
-		<fileMode>544</fileMode>
-	</fileSet>
-	<fileSet>
-		<outputDirectory>/ews/webapp/WEB-INF/classes/conf.dist</outputDirectory>
-		<directory>embeddedwebserver/conf</directory>
-		<fileMode>700</fileMode>
-	</fileSet>
-	<fileSet>
-		<outputDirectory>/db</outputDirectory>
-		<directory>security-admin/db</directory>
-		<fileMode>544</fileMode>
-	</fileSet>
+  <fileSet>
+    <outputDirectory>/ews</outputDirectory>
+    <directory>embeddedwebserver/scripts</directory>
+    <fileMode>544</fileMode>
+  </fileSet>
+  <fileSet>
+    <outputDirectory>/ews/webapp/WEB-INF/classes/conf.dist</outputDirectory>
+    <directory>embeddedwebserver/conf</directory>
+    <fileMode>700</fileMode>
+  </fileSet>
+  <fileSet>
+    <outputDirectory>/db</outputDirectory>
+    <directory>security-admin/db</directory>
+    <fileMode>544</fileMode>
+  </fileSet>
 
-	<fileSet>
-		<outputDirectory>/contrib</outputDirectory>
-		<directory>security-admin/contrib</directory>
-		<fileMode>544</fileMode>
-	</fileSet>
+  <fileSet>
+    <outputDirectory>/contrib</outputDirectory>
+    <directory>security-admin/contrib</directory>
+    <fileMode>544</fileMode>
+  </fileSet>
 
-	<fileSet>
-		<outputDirectory>/</outputDirectory>
-		<directory>security-admin/scripts</directory>
-		<includes>
-			<include>install.properties</include>
-		</includes>
-		<fileMode>700</fileMode>
-	</fileSet>
-	<fileSet>
-		<outputDirectory>/</outputDirectory>
-		<directory>security-admin/scripts</directory>
-		<includes>
-			<include>setup.sh</include>
-			<include>setup_authentication.sh</include>
-			<include>set_globals.sh</include>
-			<include>db_setup.py</include>
-			<include>dba_script.py</include>
-			<include>restrict_permissions.py</include>
-			<include>upgrade_admin.py</include>
-			<include>upgrade.sh</include>
-			<include>update_property.py</include>
-			<include>ranger_credential_helper.py</include>
-			<include>deleteUserGroupUtil.py</include>
-			<include>changepasswordutil.py</include>
+  <fileSet>
+    <outputDirectory>/</outputDirectory>
+    <directory>security-admin/scripts</directory>
+    <includes>
+      <include>install.properties</include>
+    </includes>
+    <fileMode>700</fileMode>
+  </fileSet>
+  <fileSet>
+    <outputDirectory>/</outputDirectory>
+    <directory>security-admin/scripts</directory>
+    <includes>
+      <include>setup.sh</include>
+      <include>setup_authentication.sh</include>
+      <include>set_globals.sh</include>
+      <include>db_setup.py</include>
+      <include>dba_script.py</include>
+      <include>restrict_permissions.py</include>
+      <include>upgrade_admin.py</include>
+      <include>upgrade.sh</include>
+      <include>update_property.py</include>
+      <include>ranger_credential_helper.py</include>
+      <include>deleteUserGroupUtil.py</include>
+      <include>changepasswordutil.py</include>
                 <include>changeusernameutil.py</include>
                 <include>rolebasedusersearchutil.py</include>
-		</includes>
-		<fileMode>544</fileMode>
-	</fileSet>
-	<fileSet>
-		<outputDirectory>/templates-upgrade</outputDirectory>
-		<directory>security-admin/scripts</directory>
-		<includes>
-			<include>install.properties</include>
-			<include>ranger-admin-site-template.xml</include>
-		</includes>
-	</fileSet>
-	<fileSet>
-		<outputDirectory>/</outputDirectory>
-		<directory>security-admin</directory>
-		<includes>
-			<include>3rd_party_licenses.txt</include>
-			<include>3rd_party_licenses_text.txt</include>
-		</includes>
-		<fileMode>444</fileMode>
-	</fileSet>
-	<fileSet>
-		<outputDirectory>/</outputDirectory>
-		<directory>${project.build.directory}</directory>
-		<includes>
-			<include>version</include>
-		</includes>
-		<fileMode>444</fileMode>
-	</fileSet>
+    </includes>
+    <fileMode>544</fileMode>
+  </fileSet>
+  <fileSet>
+    <outputDirectory>/templates-upgrade</outputDirectory>
+    <directory>security-admin/scripts</directory>
+    <includes>
+      <include>install.properties</include>
+      <include>ranger-admin-site-template.xml</include>
+    </includes>
+  </fileSet>
+  <fileSet>
+    <outputDirectory>/</outputDirectory>
+    <directory>security-admin</directory>
+    <includes>
+      <include>3rd_party_licenses.txt</include>
+      <include>3rd_party_licenses_text.txt</include>
+    </includes>
+    <fileMode>444</fileMode>
+  </fileSet>
+  <fileSet>
+    <outputDirectory>/</outputDirectory>
+    <directory>${project.build.directory}</directory>
+    <includes>
+      <include>version</include>
+    </includes>
+    <fileMode>444</fileMode>
+  </fileSet>
    <fileSet>
         <directory>security-admin/src/bin</directory>
         <outputDirectory>bin</outputDirectory>

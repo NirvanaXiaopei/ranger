@@ -32,7 +32,7 @@
         <relativePath>..</relativePath>
     </parent>
     <dependencies>
-        <dependency>
+<!--         <dependency>
             <groupId>io.prestosql</groupId>
             <artifactId>presto-spi</artifactId>
             <version>${presto.version}</version>
@@ -41,6 +41,16 @@
             <groupId>io.prestosql</groupId>
             <artifactId>presto-jdbc</artifactId>
             <version>${presto.version}</version>
+        </dependency> -->
+        <dependency>
+          <groupId>com.facebook.presto</groupId>
+            <artifactId>presto-spi</artifactId>
+            <version>0.270</version>
+        </dependency>
+        <dependency>
+            <groupId>com.facebook.presto</groupId>
+            <artifactId>presto-jdbc</artifactId>
+            <version>0.270</version>
         </dependency>
         <dependency>
             <groupId>org.apache.ranger</groupId>

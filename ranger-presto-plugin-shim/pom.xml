@@ -36,10 +36,15 @@
             <artifactId>ranger-plugins-common</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
+<!--         <dependency>
             <groupId>io.prestosql</groupId>
             <artifactId>presto-spi</artifactId>
             <version>${presto.version}</version>
+        </dependency> -->
+        <dependency>
+            <groupId>com.facebook.presto</groupId>
+            <artifactId>presto-spi</artifactId>
+            <version>0.270</version>
         </dependency>
         <dependency>
             <groupId>org.apache.ranger</groupId>
